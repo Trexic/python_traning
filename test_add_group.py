@@ -4,6 +4,7 @@ import time
 import json
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from group import Group
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
@@ -19,23 +20,58 @@ class TestAddressbook():
     self.driver.quit()
   
   def test_addressbook(self):
+    self.open_home_page()
+    self.login( username="admin", password="secret")
+    self.open_group_page()
+    self.init_group_creation()
+    self.fill_group_form( Group(name="w54hyevrff", header="h4q3aevf", footer="3qhgavfd"))
+    self.submit_group_creation()
+    self.return_to_groups_page()
+    self.logout()
+    # self.driver.find_element(By.NAME, "user").send_keys("admin")
+    #self.driver.find_element(By.CSS_SELECTOR, "html").click()
+
+
+  def test_addressbook1(self):
+    self.open_home_page()
+    self.login( username="admin", password="secret")
+    self.open_group_page()
+    self.init_group_creation()
+    self.fill_group_form( Group(name="", header="", footer=""))
+    self.submit_group_creation()
+    self.return_to_groups_page()
+    self.logout()
+
+
+  def logout(self):
+    self.driver.find_element(By.LINK_TEXT, "Logout").click()
+
+  def return_to_groups_page(self):
+    self.driver.find_element(By.LINK_TEXT, "group page").click()
+
+  def submit_group_creation(self):
+    self.driver.find_element(By.NAME, "submit").click()
+
+  def fill_group_form(self, group):
+    self.driver.find_element(By.NAME, "group_name").click()
+    self.driver.find_element(By.NAME, "group_name").send_keys(group.name)
+    self.driver.find_element(By.NAME, "group_header").click()
+    self.driver.find_element(By.NAME, "group_header").send_keys(group.header)
+    self.driver.find_element(By.NAME, "group_footer").click()
+    self.driver.find_element(By.NAME, "group_footer").send_keys(group.footer)
+
+  def init_group_creation(self):
+    self.driver.find_element(By.NAME, "new").click()
+
+  def open_group_page(self):
+    self.driver.find_element(By.LINK_TEXT, "groups").click()
+
+  def login(self, username, password):
+    self.driver.find_element(By.NAME, "user").send_keys(username)
+    self.driver.find_element(By.NAME, "pass").click()
+    self.driver.find_element(By.NAME, "pass").send_keys(password)
+    self.driver.find_element(By.CSS_SELECTOR, "input:nth-child(7)").click()
+
+  def open_home_page(self):
     self.driver.get("http://localhost/addressbook/")
     self.driver.set_window_size(1550, 838)
-    self.driver.find_element(By.NAME, "user").send_keys("admin")
-    self.driver.find_element(By.NAME, "pass").click()
-    self.driver.find_element(By.NAME, "pass").send_keys("secret")
-    self.driver.find_element(By.CSS_SELECTOR, "input:nth-child(7)").click()
-    self.driver.find_element(By.LINK_TEXT, "groups").click()
-    self.driver.find_element(By.NAME, "new").click()
-    self.driver.find_element(By.NAME, "group_name").click()
-    self.driver.find_element(By.NAME, "group_name").send_keys("w54hyevrff")
-    self.driver.find_element(By.NAME, "group_header").click()
-    self.driver.find_element(By.NAME, "group_header").send_keys("h4q3aevf")
-    self.driver.find_element(By.NAME, "group_footer").click()
-    self.driver.find_element(By.NAME, "group_footer").send_keys("3qhgavfd")
-    self.driver.find_element(By.NAME, "submit").click()
-    self.driver.find_element(By.LINK_TEXT, "group page").click()
-    self.driver.find_element(By.LINK_TEXT, "Logout").click()
-    self.driver.find_element(By.NAME, "user").send_keys("admin")
-    self.driver.find_element(By.CSS_SELECTOR, "html").click()
-  
